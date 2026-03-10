@@ -54,6 +54,14 @@ const LoginPage = () => {
             }
         }
 
+        if (selectedRole.id === 'ngo') {
+            if (email !== 'sttsupdates@gmail.com' || password !== 'password 123') {
+                setError('Invalid NGO credentials. Please use sttsupdates@gmail.com / password 123');
+                setIsLoading(false);
+                return;
+            }
+        }
+
         setIsLoading(true);
         setError('');
 
