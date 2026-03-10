@@ -32,16 +32,26 @@ const UrgencyMatcher = () => {
 
     const startMatch = (ngo) => {
         setMatching(ngo._id);
-        setMatchedDonation(null);
+        const available = allDonations.filter(d => d.status === 'verified');
+        const match = available[Math.floor(Math.random() * available.length)];
 
-        // Smart match using real available donations
         setTimeout(() => {
-            const available = allDonations.filter(d => d.status === 'verified');
-            const match = available[Math.floor(Math.random() * available.length)];
             setMatchedDonation(match || null);
             setMatching(null);
-            toast.success(`Optimal Match Assigned! 🍱 -> 🏠`);
+            if (match) toast.success(`Optimal Match Assigned! 🍱 -> 🏠`);
+            else toast.error("No verified surplus available right now.");
         }, 2000);
+    };
+
+    const handleDeploy = async (id) => {
+        try {
+            await donationAPI.updateStatus(id, 'accepted');
+            toast.success('Mission Deployed! 🚀');
+            setMatchedDonation(null); // Clear for next match
+            window.location.reload();
+        } catch (error) {
+            toast.error('Deployment failed.');
+        }
     };
 
     return (
