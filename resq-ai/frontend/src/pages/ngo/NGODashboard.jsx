@@ -19,7 +19,8 @@ const NGODashboard = () => {
         setLoading(true);
         donationAPI.getAll()
             .then(({ data }) => {
-                const all = data.donations || data.data || [];
+                const all = Array.isArray(data) ? data : (data.donations || data.data || []);
+                console.log("Donations received:", all.length);
                 setPendingRequests(all.filter(d => d.status === 'verified'));
                 setActiveRescues(all.filter(d => d.status === 'in_transit' || d.status === 'accepted'));
             })

@@ -20,7 +20,10 @@ const UrgencyMatcher = () => {
             .then(({ data }) => setAllNgos(data.ngos || data.data || data || []))
             .catch(() => setAllNgos([]));
         donationAPI.getAll()
-            .then(({ data }) => setAllDonations(data.donations || data.data || []))
+            .then(({ data }) => {
+                const all = Array.isArray(data) ? data : (data.donations || data.data || []);
+                setAllDonations(all);
+            })
             .catch(() => setAllDonations([]));
     }, []);
 
