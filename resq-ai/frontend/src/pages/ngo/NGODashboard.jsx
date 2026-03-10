@@ -182,7 +182,20 @@ const NGODashboard = () => {
                                                         />
                                                     </div>
                                                 </div>
-                                                <div className="text-[10px] text-stone-500 font-bold uppercase tracking-tight">Estimated ETA: {d.status === 'accepted' ? 'Calculating...' : '8m'}</div>
+                                                <div className="flex justify-between items-center mt-2">
+                                                    <div className="text-[10px] text-stone-500 font-bold uppercase tracking-tight">
+                                                        Estimated ETA: {d.status === 'accepted' ? 'Calculating...' : '8m'}
+                                                    </div>
+                                                    {d.status === 'accepted' && (
+                                                        <button
+                                                            onClick={() => handleStatusUpdate(d._id, 'cancelled')}
+                                                            className={`px-3 py-1.5 rounded-xl font-black text-[8px] uppercase tracking-widest transition-all
+                                                                ${isDark ? 'bg-white/5 text-rose-500 hover:bg-rose-500/20' : 'bg-rose-50 text-rose-500 hover:bg-rose-100'}`}
+                                                        >
+                                                            Cancel Mission
+                                                        </button>
+                                                    )}
+                                                </div>
                                             </ClayCard>
                                         ))}
                                     </div>

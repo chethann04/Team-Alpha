@@ -9,7 +9,7 @@ const DonationSchema = new mongoose.Schema({
     expiryDate: { type: Date },
     status: {
         type: String,
-        enum: ['pending', 'verified', 'accepted', 'collected', 'delivered', 'expired', 'rejected'],
+        enum: ['pending', 'verified', 'accepted', 'collected', 'delivered', 'expired', 'rejected', 'cancelled'],
         default: 'pending'
     },
     location: {
