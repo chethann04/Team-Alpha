@@ -63,8 +63,8 @@ const LoginPage = () => {
         }
 
         if (selectedRole.id === 'rider') {
-            if (email !== 'sanvihr890@gmail.com' || password !== 'password13') {
-                setError('Invalid Rider credentials. Please use sanvihr890@gmail.com / password13');
+            if (email !== 'chethannhs04@gmail.com' || password !== '12345') {
+                setError('Invalid Rider credentials. Please use chethannhs04@gmail.com / 12345');
                 setIsLoading(false);
                 return;
             }
