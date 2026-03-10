@@ -30,7 +30,7 @@ export const aiAPI = {
 
 export const riderAPI = {
     getFeed: () => API.get('/rider/feed'),
-    accept: (data) => API.post('/rider/accept', data),
+    acceptRescue: (data) => API.post('/rider/accept', data),
     complete: (data) => API.post('/rider/complete', data),
     leaderboard: () => API.get('/rider/leaderboard'),
     create: (data) => API.post('/rider', data),
