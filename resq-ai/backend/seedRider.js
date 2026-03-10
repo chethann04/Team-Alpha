@@ -8,7 +8,7 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/resq-ai')
     .then(async () => {
         console.log('Connected to MongoDB');
 
-        const riderEmail = 'chethannhs04@gmail.com';
+        const riderEmail = 'sanvihr890@gmail.com';
 
         // Remove existing if any
         await Rider.deleteOne({ email: riderEmail });

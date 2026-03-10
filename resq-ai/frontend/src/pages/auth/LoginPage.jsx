@@ -46,9 +46,9 @@ const LoginPage = () => {
             return;
         }
 
-        if (selectedRole.id === 'donor') {
-            if (email !== 'chethuc809@gmail.com' || password !== 'password123') {
-                setError('Invalid Donor credentials. Please use chethuc809@gmail.com / password123');
+        if (selectedRole.id === 'restaurant') {
+            if (email !== 'chethannhs04@gmail.com' || password !== '12345') {
+                setError('Invalid Restaurant credentials. Please use chethannhs04@gmail.com / 12345');
                 setIsLoading(false);
                 return;
             }
@@ -63,8 +63,8 @@ const LoginPage = () => {
         }
 
         if (selectedRole.id === 'rider') {
-            if (email !== 'chethannhs04@gmail.com' || password !== '12345') {
-                setError('Invalid Rider credentials. Please use chethannhs04@gmail.com / 12345');
+            if (email !== 'sanvihr890@gmail.com' || password !== 'password13') {
+                setError('Invalid Rider credentials. Please use sanvihr890@gmail.com / password13');
                 setIsLoading(false);
                 return;
             }
