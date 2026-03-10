@@ -18,6 +18,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import LoginPage from './pages/auth/LoginPage';
 import Profile from './pages/profile/Profile';
+import RiderDashboard from './pages/rider/RiderDashboard';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -84,6 +85,11 @@ function App() {
           <Route path="/community" element={
             <ProtectedRoute>
               <CommunityFeed />
+            </ProtectedRoute>
+          } />
+          <Route path="/rider" element={
+            <ProtectedRoute allowedRoles={['rider']}>
+              <RiderDashboard />
             </ProtectedRoute>
           } />
           <Route path="/admin" element={

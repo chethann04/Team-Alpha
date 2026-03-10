@@ -10,7 +10,7 @@ const roles = [
     { id: 'corporate', label: 'Corporate Desk', icon: '🏢', color: '#0ea5e9', path: '/corporate', desc: 'Enterprise CSR & Canteen management' },
     { id: 'restaurant', label: 'Restaurant Hub', icon: '🍳', color: '#f59e0b', path: '/restaurant', desc: 'Manage kitchen surplus & menus' },
     { id: 'ngo', label: 'NGO Network', icon: '🏠', color: '#8b5cf6', path: '/ngo', desc: 'Strategic food distribution' },
-    { id: 'community', label: 'Community Hub', icon: '🌍', color: '#10b981', path: '/community', desc: 'Waste-free advocacy & growth' },
+    { id: 'rider', label: 'Delivery Partner', icon: '🚴‍♂️', color: '#10b981', path: '/rider', desc: 'Real-time rescue & delivery' },
     { id: 'admin', label: 'System Control', icon: '⚡', color: '#ef4444', path: '/admin', desc: 'Global analytics & infrastructure' },
 ];
 
@@ -57,6 +57,14 @@ const LoginPage = () => {
         if (selectedRole.id === 'ngo') {
             if (email !== 'sttsupdates@gmail.com' || password !== 'password 123') {
                 setError('Invalid NGO credentials. Please use sttsupdates@gmail.com / password 123');
+                setIsLoading(false);
+                return;
+            }
+        }
+
+        if (selectedRole.id === 'rider') {
+            if (email !== 'rider@gmail.com' || password !== 'password123') {
+                setError('Invalid Rider credentials. Please use rider@gmail.com / password123');
                 setIsLoading(false);
                 return;
             }

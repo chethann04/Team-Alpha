@@ -12,7 +12,8 @@ const RiderFeed = () => {
     useEffect(() => {
         riderAPI.getFeed()
             .then(({ data }) => {
-                const items = (data.donations || data.data || data || []).filter(d => d.status === 'verified');
+                const all = Array.isArray(data) ? data : (data.donations || data.data || data || []);
+                const items = all.filter(d => d.status === 'accepted');
                 setRescues(items);
             })
             .catch(() => setRescues([]));
