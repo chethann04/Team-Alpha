@@ -12,11 +12,14 @@ exports.createDonation = async (req, res) => {
         const ngos = await NGO.find({}, 'email');
         const ngoEmails = ngos.map(ngo => ngo.email);
         if (ngoEmails.length > 0) {
+            const foodSummary = donation.foodItem || (donation.foodItems && donation.foodItems.map(i => i.name).join(', ')) || 'Various Items';
+            const quantitySummary = donation.kgFood ? `${donation.kgFood}kg` : donation.quantity || 'Unknown';
+
             emailController.sendDonationNotification(
                 donation.donorName,
-                donation.foodItem,
-                donation.quantity,
-                donation.location.address,
+                foodSummary,
+                quantitySummary,
+                donation.location?.address || 'Location provided in app',
                 ngoEmails
             );
         }

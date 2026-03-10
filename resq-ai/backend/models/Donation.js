@@ -2,12 +2,14 @@ const mongoose = require('mongoose');
 
 const DonationSchema = new mongoose.Schema({
     donorName: { type: String, required: true },
-    foodItem: { type: String, required: true },
-    quantity: { type: String, required: true },
-    expiryDate: { type: Date, required: true },
+    foodItem: { type: String },
+    foodItems: [{ name: String, quantity: String, unit: String }],
+    quantity: { type: String },
+    kgFood: { type: Number },
+    expiryDate: { type: Date },
     status: {
         type: String,
-        enum: ['pending', 'accepted', 'collected', 'delivered', 'expired'],
+        enum: ['pending', 'verified', 'accepted', 'collected', 'delivered', 'expired', 'rejected'],
         default: 'pending'
     },
     location: {
@@ -17,6 +19,7 @@ const DonationSchema = new mongoose.Schema({
     },
     impact: {
         co2Saved: { type: Number, default: 0 },
+        co2Prevented: { type: Number, default: 0 },
         mealsFed: { type: Number, default: 0 }
     },
     createdAt: { type: Date, default: Date.now }
