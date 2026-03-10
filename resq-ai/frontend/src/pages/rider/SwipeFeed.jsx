@@ -52,7 +52,7 @@ const SwipeCard = ({ donation, onSwipeLeft, onSwipeRight }) => {
                 <div className="h-[55%] relative overflow-hidden group">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-mint/20 to-purple-500/20" />
                     <img
-                        src={`https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format`}
+                        src={donation.imageUrl || `https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format`}
                         className="w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-700"
                         alt="Food Rescue"
                     />

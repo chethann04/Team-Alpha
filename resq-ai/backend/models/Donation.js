@@ -22,6 +22,7 @@ const DonationSchema = new mongoose.Schema({
         co2Prevented: { type: Number, default: 0 },
         mealsFed: { type: Number, default: 0 }
     },
+    imageUrl: { type: String },
     createdAt: { type: Date, default: Date.now }
 });
 

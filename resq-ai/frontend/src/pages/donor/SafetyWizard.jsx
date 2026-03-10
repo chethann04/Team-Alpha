@@ -205,8 +205,8 @@ const SafetyWizard = ({ onComplete }) => {
                                                         key={opt}
                                                         onClick={() => handleSafetyChange(q.field, opt)}
                                                         className={`flex-1 py-3 rounded-xl text-xs font-black transition-all ${formData.safety[q.field] === opt
-                                                                ? 'bg-primary text-white shadow-lg'
-                                                                : isDark ? 'bg-white/5 text-gray-500' : 'bg-white text-gray-400 shadow-inner'
+                                                            ? 'bg-primary text-white shadow-lg'
+                                                            : isDark ? 'bg-white/5 text-gray-500' : 'bg-white text-gray-400 shadow-inner'
                                                             }`}
                                                     >
                                                         {opt}
@@ -234,6 +234,7 @@ const SafetyWizard = ({ onComplete }) => {
                                     setIsAnalyzing(false);
                                 }}
                                 onStart={() => setIsAnalyzing(true)}
+                                onImageCapture={(img) => setFormData(p => ({ ...p, imageUrl: img }))}
                             />
                             {isAnalyzing && (
                                 <motion.div

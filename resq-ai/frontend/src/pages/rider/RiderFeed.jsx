@@ -34,9 +34,16 @@ const RiderFeed = () => {
             {rescues.length > 0 ? rescues.map((r, i) => (
                 <ClayCard key={r._id} delay={i * 0.05}>
                     <div className="flex justify-between items-start mb-3">
-                        <div>
-                            <h3 className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{r.donorName}</h3>
-                            <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{r.location.address}</p>
+                        <div className="flex gap-4">
+                            {r.imageUrl && (
+                                <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 border border-white/10">
+                                    <img src={r.imageUrl} alt="Rescue" className="w-full h-full object-cover" />
+                                </div>
+                            )}
+                            <div>
+                                <h3 className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{r.donorName}</h3>
+                                <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{r.location.address}</p>
+                            </div>
                         </div>
                         <div className="text-right">
                             <div className="text-primary font-black text-lg">{r.kgFood}kg</div>

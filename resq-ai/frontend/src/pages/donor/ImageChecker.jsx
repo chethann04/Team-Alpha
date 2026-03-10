@@ -6,7 +6,7 @@ import ClayCard from '../../components/ui/ClayCard';
 import toast from 'react-hot-toast';
 import { Camera, Zap, ShieldCheck, UploadCloud, RefreshCw } from 'lucide-react';
 
-const ImageChecker = ({ onResult, onStart, embedded = false }) => {
+const ImageChecker = ({ onResult, onStart, onImageCapture, embedded = false }) => {
     const { isDark } = useTheme();
     const inputRef = useRef(null);
     const [image, setImage] = useState(null);
@@ -22,7 +22,10 @@ const ImageChecker = ({ onResult, onStart, embedded = false }) => {
         setImage(file);
         setResult(null);
         const reader = new FileReader();
-        reader.onloadend = () => setPreview(reader.result);
+        reader.onloadend = () => {
+            setPreview(reader.result);
+            if (onImageCapture) onImageCapture(reader.result);
+        };
         reader.readAsDataURL(file);
 
         // Auto-analyze
