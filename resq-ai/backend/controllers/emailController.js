@@ -88,3 +88,19 @@ exports.sendDeliveryNotification = async (donorName, foodItem, quantity, pickupL
         console.error('Delivery notification error:', error);
     }
 };
+
+exports.sendDonorConfirmation = async (donorName, donorEmail, foodItem, quantity) => {
+    try {
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !donorEmail) return;
+        const mailOptions = {
+            from: `"ResQ-AI Support" <${process.env.EMAIL_USER}>`,
+            to: donorEmail,
+            subject: '✅ Your Donation is Logged - ResQ-AI',
+            html: require('../utils/emailTemplates').getDonorConfirmationTemplate(donorName, foodItem, quantity)
+        };
+        await transporter.sendMail(mailOptions);
+        console.log('Donor confirmation email sent to:', donorEmail);
+    } catch (error) {
+        console.error('Donor confirmation email error:', error);
+    }
+};

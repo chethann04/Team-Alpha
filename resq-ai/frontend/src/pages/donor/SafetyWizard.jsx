@@ -6,7 +6,7 @@ import ImageChecker from './ImageChecker';
 import { donationAPI } from '../../utils/api';
 import toast from 'react-hot-toast';
 import Confetti from 'react-confetti';
-import { ChevronRight, ChevronLeft, Package, Sparkles, ShieldCheck, Heart } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Package, Sparkles, ShieldCheck, Heart, Zap } from 'lucide-react';
 
 const SafetyWizard = ({ onComplete }) => {
     const { isDark } = useTheme();
@@ -17,6 +17,7 @@ const SafetyWizard = ({ onComplete }) => {
 
     const [formData, setFormData] = useState({
         donorName: '',
+        donorEmail: '',
         donorType: 'restaurant',
         location: { address: '', lat: 12.9716, lng: 77.5946 },
         foodItems: [{ name: '', quantity: '', unit: 'kg' }],
@@ -66,6 +67,7 @@ const SafetyWizard = ({ onComplete }) => {
     };
 
     const handleSubmit = async () => {
+        console.log('--- Submitting Donation ---');
         setLoading(true);
         try {
             const kg = formData.foodItems.reduce((acc, curr) => acc + (Number(curr.quantity) || 0), 0);
@@ -77,7 +79,10 @@ const SafetyWizard = ({ onComplete }) => {
                 status: 'verified'
             };
 
-            await donationAPI.create(payload);
+            console.log('Sending to API:', payload);
+            const response = await donationAPI.create(payload);
+            console.log('API Response:', response.data);
+
             setShowConfetti(true);
             toast.success('Zero Waste Mission Started! 🚀');
 
@@ -86,6 +91,8 @@ const SafetyWizard = ({ onComplete }) => {
                 onComplete();
             }, 5000);
         } catch (error) {
+            console.error('Submission error:', error);
+            console.error('Error details:', error.response?.data || error.message);
             toast.error('Mission failed to launch, but saved locally!');
             onComplete();
         } finally {
@@ -144,13 +151,24 @@ const SafetyWizard = ({ onComplete }) => {
                                             name="preparedTime"
                                             value={formData.preparedTime}
                                             onChange={handleFormChange}
-                                            className={`w-full p-4 rounded-2xl font-bold ${isDark ? 'bg-white/5 text-white' : 'bg-white shadow-clay'} focus:ring-2 ring-primary/20 outline-none`}
+                                            className={`w-full p-4 rounded-2xl font-bold ${isDark ? 'bg-slate-900 text-white border-white/10' : 'bg-white text-gray-900 shadow-clay'} focus:ring-2 ring-primary/20 outline-none appearance-none cursor-pointer`}
                                         >
-                                            <option>Just now</option>
-                                            <option>1 hour ago</option>
-                                            <option>2 hours ago</option>
-                                            <option>3+ hours ago</option>
+                                            <option className={isDark ? 'bg-slate-900 text-white' : 'bg-white text-gray-900'}>Just now</option>
+                                            <option className={isDark ? 'bg-slate-900 text-white' : 'bg-white text-gray-900'}>1 hour ago</option>
+                                            <option className={isDark ? 'bg-slate-900 text-white' : 'bg-white text-gray-900'}>2 hours ago</option>
+                                            <option className={isDark ? 'bg-slate-900 text-white' : 'bg-white text-gray-900'}>3+ hours ago</option>
                                         </select>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Contact Email (for Ticket)</label>
+                                        <input
+                                            name="donorEmail"
+                                            type="email"
+                                            placeholder="your@email.com"
+                                            value={formData.donorEmail}
+                                            onChange={handleFormChange}
+                                            className={`w-full p-4 rounded-2xl font-bold ${isDark ? 'bg-white/5 text-white' : 'bg-white shadow-clay'} focus:ring-2 ring-primary/20 outline-none`}
+                                        />
                                     </div>
                                 </div>
                             </ClayCard>
@@ -158,7 +176,34 @@ const SafetyWizard = ({ onComplete }) => {
                             <ClayCard className="border-l-4 border-mint">
                                 <div className="flex justify-between items-center mb-6">
                                     <h3 className={`text-xl font-black ${isDark ? 'text-white' : 'text-gray-900'}`}>Food Items</h3>
-                                    <button onClick={addItem} className="px-3 py-1 rounded-lg bg-mint/10 text-mint text-[10px] font-black uppercase">+ Add</button>
+                                    <div className="flex gap-2">
+                                        <button onClick={addItem} className="px-3 py-1 rounded-lg bg-mint/10 text-mint text-[10px] font-black uppercase tracking-tighter hover:bg-mint/20 transition-colors">+ Custom</button>
+                                    </div>
+                                </div>
+                                <div className="mb-6">
+                                    <label className="text-[8px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">Quick Select</label>
+                                    <div className="flex flex-wrap gap-2">
+                                        {['Rice', 'Veg Curry', 'Dal', 'Bread/Roti', 'Fruits', 'Milk/Dairy'].map(food => (
+                                            <button
+                                                key={food}
+                                                onClick={() => {
+                                                    const lastItem = formData.foodItems[formData.foodItems.length - 1];
+                                                    if (lastItem && !lastItem.name) {
+                                                        handleItemChange(formData.foodItems.length - 1, 'name', food);
+                                                    } else {
+                                                        setFormData(prev => ({
+                                                            ...prev,
+                                                            foodItems: [...prev.foodItems, { name: food, quantity: '', unit: 'kg' }]
+                                                        }));
+                                                    }
+                                                }}
+                                                className={`px-3 py-1.5 rounded-full text-[10px] font-black transition-all ${isDark ? 'bg-white/5 text-gray-400 hover:bg-primary/20 hover:text-primary' : 'bg-gray-100 text-gray-600 hover:bg-primary/10 hover:text-primary'
+                                                    }`}
+                                            >
+                                                + {food}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                                 <div className="space-y-3">
                                     {formData.foodItems.map((item, i) => (
@@ -255,10 +300,35 @@ const SafetyWizard = ({ onComplete }) => {
                                     <span className="text-xs font-black text-primary uppercase tracking-[0.2em] animate-pulse">Gemini is Thinking...</span>
                                 </motion.div>
                             )}
+                            {aiResult?.status === 'unsafe' && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="p-4 rounded-3xl bg-red-500/10 border-2 border-red-500/20 text-center space-y-2"
+                                >
+                                    <div className="text-red-500 font-black uppercase tracking-widest text-[10px]">Critical Safety Alert</div>
+                                    <h4 className="text-sm font-black text-gray-900 dark:text-white">You can't donate this food</h4>
+                                    <p className="text-[10px] text-gray-500 font-medium leading-relaxed">Our AI detected safety risks that violate donation standards. Please dispose of this item responsibly.</p>
+                                    <button
+                                        onClick={() => {
+                                            setAiResult(null);
+                                            setFormData(p => ({ ...p, imageUrl: null }));
+                                        }}
+                                        className="text-[10px] font-black text-primary uppercase underline mt-2"
+                                    >
+                                        Reset & Try Again
+                                    </button>
+                                </motion.div>
+                            )}
+
                             <div className="flex gap-4">
                                 <button onClick={prevStep} className={`flex-1 py-5 rounded-[2rem] font-black ${isDark ? 'bg-white/5 text-white' : 'bg-white text-gray-600 shadow-clay'}`}>Back</button>
-                                <button onClick={nextStep} disabled={!aiResult} className={`flex-[2] py-5 rounded-[2rem] font-black shadow-xl flex items-center justify-center gap-2 ${aiResult ? 'bg-primary text-white' : 'bg-gray-300 text-white cursor-not-allowed grayscale'}`}>
-                                    View Result <ChevronRight size={20} />
+                                <button
+                                    onClick={nextStep}
+                                    disabled={!aiResult || aiResult.status === 'unsafe'}
+                                    className={`flex-[2] py-5 rounded-[2rem] font-black shadow-xl flex items-center justify-center gap-2 ${(!aiResult || aiResult.status === 'unsafe') ? 'bg-gray-300 text-white cursor-not-allowed grayscale bg-opacity-50' : 'bg-primary text-white'}`}
+                                >
+                                    {aiResult?.status === 'unsafe' ? 'Safety Risk Detected' : 'View Result'} <ChevronRight size={20} />
                                 </button>
                             </div>
                         </div>
@@ -270,16 +340,20 @@ const SafetyWizard = ({ onComplete }) => {
                                 <motion.div
                                     initial={{ scale: 0, rotate: -45 }}
                                     animate={{ scale: 1, rotate: 0 }}
-                                    className="w-24 h-24 rounded-full bg-mint/20 flex items-center justify-center mx-auto mb-6 text-mint border-4 border-mint/20 shadow-2xl"
+                                    className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 border-4 shadow-2xl ${aiResult?.status === 'safe' ? 'bg-mint/20 text-mint border-mint/20' : 'bg-red-500/20 text-red-500 border-red-500/20'}`}
                                 >
-                                    <ShieldCheck size={48} />
+                                    {aiResult?.status === 'safe' ? <ShieldCheck size={48} /> : <Zap size={48} />}
                                 </motion.div>
 
-                                <div className="inline-block px-4 py-1.5 rounded-full bg-mint/10 text-mint text-xs font-black uppercase tracking-widest mb-4">
-                                    ✓ Safe to Donate
+                                <div className={`inline-block px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest mb-4 ${aiResult?.status === 'safe' ? 'bg-mint/10 text-mint' : 'bg-red-500/10 text-red-500'}`}>
+                                    {aiResult?.status === 'safe' ? '✓ Safe to Donate' : '⚠ Quality Warning'}
                                 </div>
-                                <h2 className={`text-3xl font-black mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Mission Verified</h2>
-                                <p className="text-xs text-gray-500 font-medium mb-8">AI Analysis complete. Impact logged successfully.</p>
+                                <h2 className={`text-3xl font-black mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                                    {aiResult?.status === 'safe' ? 'Mission Verified' : 'Mission Blocked'}
+                                </h2>
+                                <p className="text-xs text-gray-500 font-medium mb-8">
+                                    {aiResult?.status === 'safe' ? 'AI Analysis complete. Impact logged successfully.' : 'Our AI detected that this food might not be safe for donation. Please double-check quality.'}
+                                </p>
 
                                 <div className="grid grid-cols-2 gap-4 mb-8">
                                     <div className={`p-5 rounded-3xl ${isDark ? 'bg-white/5' : 'bg-gray-50'}`}>
@@ -310,8 +384,8 @@ const SafetyWizard = ({ onComplete }) => {
 
                             <div className="flex gap-4">
                                 <button onClick={prevStep} disabled={loading} className={`flex-1 py-5 rounded-[2rem] font-black ${isDark ? 'bg-white/5 text-white' : 'bg-white text-gray-600 shadow-clay'}`}>Back</button>
-                                <button onClick={handleSubmit} disabled={loading} className="flex-[2] py-5 rounded-[2rem] bg-gradient-to-r from-primary to-mint text-white font-black shadow-xl flex items-center justify-center gap-2 overflow-hidden relative">
-                                    {loading ? 'Launching Mission...' : '🚀 Generate Rescue Ticket'}
+                                <button onClick={handleSubmit} disabled={loading || aiResult?.status !== 'safe'} className={`flex-[2] py-5 rounded-[2rem] font-black shadow-xl flex items-center justify-center gap-2 overflow-hidden relative ${aiResult?.status === 'safe' ? 'bg-gradient-to-r from-primary to-mint text-white' : 'bg-gray-300 text-white cursor-not-allowed grayscale'}`}>
+                                    {loading ? 'Launching Mission...' : aiResult?.status === 'safe' ? '🚀 Generate Rescue Ticket' : 'Cannot Donate Unsafe Food'}
                                 </button>
                             </div>
                         </div>

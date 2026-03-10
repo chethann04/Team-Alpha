@@ -31,17 +31,28 @@ exports.checkImage = async (req, res) => {
         const imageData = fs.readFileSync(req.file.path);
         const imageBase64 = imageData.toString('base64');
 
-        const prompt = `Analyze this food image for safety and spoilage. 
-        Detect ANY signs of rot, mold, discoloration, bruising, or unusual texture. 
-        Be extremely strict. If the food looks even slightly suspicious, mark it as unsafe.
+        const prompt = `Analyze this food image for human consumption safety, freshness, and donation suitability. 
+        Detect ANY signs of:
+        - Spoilage: Rot, fuzzy mold, slime, wilting, or severe discoloration.
+        - Decay: Bruising, dark spots on vegetables, or fermented appearance.
+        - Waste: Food that looks like plate scraps, half-eaten leftovers, or industrial waste.
+        - Expiration: Any visible date labels (Exp, Best Before, Use By). If the date is TODAY (${new Date().toLocaleDateString()}), YESTERDAY, or any past date, mark as "Unsafe".
+        - Stale/Old: Food that looks dry, hardened, or like it has been sitting out for too long.
+
+        CRITICAL: If the food looks like it came from a trash can, a scrap plate, or is even slightly unappetizing, MARK AS UNSAFE. 
+        It is better to REJECT safe food than to allow one unsafe item. 
+        If you see ANY date on a package, you MUST read it. If it is within 2 days of today's date (${new Date().toLocaleDateString()}) or in the past, mark it as "Unsafe".
+        
+        Respond with "status": "unsafe" for ANY of the above. 
+
         Return a JSON object with:
         - quality: "Safe", "Unsafe", or "Caution"
-        - confidence: a number from 0-100 indicating how sure you are
+        - status: "safe" (only if quality is Safe), "unsafe" (if quality is Unsafe or Caution)
+        - confidence: a number from 0-100
         - label: the name of the food item detected
-        - shelfLife: estimated remaining shelf life (e.g., "3 days" or "Expired")
-        - score: a number from 0 to 1 (safety rating)
-        - findings: an array of strings describing what you see
-        - status: "safe" or "unsafe"
+        - shelfLife: estimated remaining shelf life (e.g., "3 days" or "Expired/Zero")
+        - score: a number from 0 to 1 (safety rating, 1 is perfect)
+        - findings: an array of strings describing specific visual cues (e.g., "Expired date label found", "Fresh leafy greens")
         Respond ONLY with the JSON object.`;
 
         const result = await model.generateContent([

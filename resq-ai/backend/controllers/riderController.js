@@ -3,9 +3,9 @@ const Donation = require('../models/Donation');
 
 exports.getFeed = async (req, res) => {
     try {
-        // Return only 'accepted' donations (NGO approved, but no rider assigned yet)
+        // Return 'accepted' (waiting for rider) and 'in_transit' (active) rescues
         const feed = await Donation.find({
-            status: 'accepted'
+            status: { $in: ['accepted', 'in_transit'] }
         }).sort({ createdAt: -1 });
         res.status(200).json(feed);
     } catch (error) {
@@ -32,6 +32,23 @@ exports.getLeaderboard = async (req, res) => {
         res.status(200).json(riders);
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+};
+
+exports.completeRescue = async (req, res) => {
+    try {
+        const { donationId } = req.body;
+        const donation = await Donation.findByIdAndUpdate(donationId, {
+            status: 'delivered'
+        }, { new: true });
+
+        if (!donation) {
+            return res.status(404).json({ message: 'Donation not found' });
+        }
+
+        res.status(200).json(donation);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
     }
 };
 

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const DonationSchema = new mongoose.Schema({
     donorName: { type: String, required: true },
+    donorEmail: { type: String },
     foodItem: { type: String },
     foodItems: [{ name: String, quantity: String, unit: String }],
     quantity: { type: String },

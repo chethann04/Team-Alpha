@@ -5,8 +5,12 @@ const emailController = require('./emailController');
 
 exports.createDonation = async (req, res) => {
     try {
+        console.log('--- Incoming Donation Request ---');
+        console.log('Payload:', JSON.stringify(req.body, null, 2));
+
         const donation = new Donation(req.body);
         await donation.save();
+        console.log('Donation saved successfully:', donation._id);
 
         // Notify NGOs about new food availability
         const ngos = await NGO.find({}, 'email');
@@ -24,8 +28,23 @@ exports.createDonation = async (req, res) => {
             );
         }
 
+        // Notify Donor
+        if (donation.donorEmail) {
+            const foodSummary = donation.foodItem || (donation.foodItems && donation.foodItems.map(i => i.name).join(', ')) || 'Various Items';
+            const quantitySummary = donation.kgFood ? `${donation.kgFood}kg` : donation.quantity || 'Unknown';
+
+            emailController.sendDonorConfirmation(
+                donation.donorName,
+                donation.donorEmail,
+                foodSummary,
+                quantitySummary
+            );
+        }
+
         res.status(201).json(donation);
     } catch (error) {
+        console.error('--- Donation Save Error ---');
+        console.error(error);
         res.status(400).json({ message: error.message });
     }
 };

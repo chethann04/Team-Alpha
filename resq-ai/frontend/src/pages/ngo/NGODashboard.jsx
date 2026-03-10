@@ -186,7 +186,7 @@ const NGODashboard = () => {
                                                     <div className="text-[10px] text-stone-500 font-bold uppercase tracking-tight">
                                                         Estimated ETA: {d.status === 'accepted' ? 'Calculating...' : '8m'}
                                                     </div>
-                                                    {d.status === 'accepted' && (
+                                                    {d.status === 'accepted' ? (
                                                         <button
                                                             onClick={() => handleStatusUpdate(d._id, 'cancelled')}
                                                             className={`px-3 py-1.5 rounded-xl font-black text-[8px] uppercase tracking-widest transition-all
@@ -194,7 +194,14 @@ const NGODashboard = () => {
                                                         >
                                                             Cancel Mission
                                                         </button>
-                                                    )}
+                                                    ) : d.status === 'in_transit' ? (
+                                                        <button
+                                                            onClick={() => handleStatusUpdate(d._id, 'delivered')}
+                                                            className="px-3 py-1.5 rounded-xl font-black text-[8px] uppercase tracking-widest bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 hover:scale-105 transition-all"
+                                                        >
+                                                            Confirm Receipt
+                                                        </button>
+                                                    ) : null}
                                                 </div>
                                             </ClayCard>
                                         ))}

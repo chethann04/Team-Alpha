@@ -122,9 +122,43 @@ const getDeliveryRequestTemplate = (donorName, foodItem, quantity, pickupLocatio
 </html>
 `;
 
+const getDonorConfirmationTemplate = (donorName, foodItem, quantity) => `
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .container { font-family: 'Inter', sans-serif; max-width: 600px; margin: 0 auto; padding: 40px; border-radius: 24px; background: #ffffff; border: 1px solid #f1f5f9; }
+        .header { background: #6366f1; padding: 30px; border-radius: 20px 20px 0 0; text-align: center; color: white; }
+        .content { padding: 30px; color: #334155; line-height: 1.6; }
+        .detail-card { background: #f5f3ff; padding: 20px; border-radius: 16px; margin: 20px 0; border-left: 4px solid #6366f1; }
+        .footer { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Donation Logged! 📦</h2>
+        </div>
+        <div class="content">
+            <p>Hi <strong>${donorName}</strong>,</p>
+            <p>Your food donation has been successfully logged on the ResQ-AI Grid. Our network of NGOs and Riders has been notified.</p>
+            <div class="detail-card">
+                <p><strong>Items:</strong> ${foodItem}</p>
+                <p><strong>Quantity:</strong> ${quantity}</p>
+                <p><strong>Status:</strong> Awaiting NGO Claim</p>
+            </div>
+            <p>Thank you for being a ResQ Hero! We will notify you once a rider picks up the donation.</p>
+        </div>
+        <div class="footer">&copy; 2025 ResQ-AI Network</div>
+    </div>
+</body>
+</html>
+`;
+
 module.exports = {
     getCertificateTemplate,
     getAlertTemplate,
     getFoodDonationTemplate,
-    getDeliveryRequestTemplate
+    getDeliveryRequestTemplate,
+    getDonorConfirmationTemplate
 };
