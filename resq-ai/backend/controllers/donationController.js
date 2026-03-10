@@ -51,11 +51,14 @@ exports.updateStatus = async (req, res) => {
             const idleRiders = await Rider.find({ status: 'idle' }, 'email');
             const riderEmails = idleRiders.map(r => r.email);
             if (riderEmails.length > 0) {
+                const foodSummary = donation.foodItem || (donation.foodItems && donation.foodItems.map(i => i.name).join(', ')) || 'Various Items';
+                const quantitySummary = donation.kgFood ? `${donation.kgFood}kg` : donation.quantity || 'Unknown';
+
                 emailController.sendDeliveryNotification(
                     donation.donorName,
-                    donation.foodItem,
-                    donation.quantity,
-                    donation.location.address,
+                    foodSummary,
+                    quantitySummary,
+                    donation.location?.address || 'Location provided in app',
                     riderEmails
                 );
             }
