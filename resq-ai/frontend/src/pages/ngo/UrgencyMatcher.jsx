@@ -151,7 +151,12 @@ const UrgencyMatcher = () => {
                                                 <div className={`text-md font-black ${isDark ? 'text-white' : 'text-gray-900'}`}>{matchedDonation.donorName}</div>
                                                 <div className="text-[10px] text-gray-500 font-bold">Distance: 1.4 km • Payload: {matchedDonation.kgFood}kg</div>
                                             </div>
-                                            <button className="px-5 py-2.5 rounded-xl bg-mint text-white text-[10px] font-black uppercase tracking-widest shadow-xl hover:scale-105 transition-transform">Deploy</button>
+                                            <button
+                                                onClick={() => handleDeploy(matchedDonation._id)}
+                                                className="px-5 py-2.5 rounded-xl bg-mint text-white text-[10px] font-black uppercase tracking-widest shadow-xl hover:scale-105 transition-transform"
+                                            >
+                                                Deploy
+                                            </button>
                                         </div>
                                     </motion.div>
                                 ) : (
