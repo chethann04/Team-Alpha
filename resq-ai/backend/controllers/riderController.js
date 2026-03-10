@@ -3,10 +3,9 @@ const Donation = require('../models/Donation');
 
 exports.getFeed = async (req, res) => {
     try {
-        // Return all pending donations as a feed
-        // Return both pending and accepted donations for the feed
+        // Return only 'accepted' donations (NGO approved, but no rider assigned yet)
         const feed = await Donation.find({
-            status: { $in: ['pending', 'accepted'] }
+            status: 'accepted'
         }).sort({ createdAt: -1 });
         res.status(200).json(feed);
     } catch (error) {

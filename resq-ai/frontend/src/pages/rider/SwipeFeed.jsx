@@ -126,8 +126,7 @@ const SwipeFeed = () => {
         riderAPI.getFeed()
             .then(({ data }) => {
                 const all = Array.isArray(data) ? data : (data.donations || data.data || data || []);
-                const items = all.filter(d => d.status === 'accepted');
-                setDonations(items);
+                setDonations(all);
             })
             .catch(() => setDonations([]))
             .finally(() => setLoading(false));

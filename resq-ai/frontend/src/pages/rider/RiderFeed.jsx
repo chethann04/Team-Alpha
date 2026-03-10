@@ -13,8 +13,7 @@ const RiderFeed = () => {
         riderAPI.getFeed()
             .then(({ data }) => {
                 const all = Array.isArray(data) ? data : (data.donations || data.data || data || []);
-                const items = all.filter(d => d.status === 'accepted');
-                setRescues(items);
+                setRescues(all);
             })
             .catch(() => setRescues([]));
     }, []);
