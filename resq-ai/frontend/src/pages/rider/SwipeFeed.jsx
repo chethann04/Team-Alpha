@@ -145,9 +145,17 @@ const SwipeFeed = () => {
         setCurrentIndex(prev => prev + 1);
     };
 
-    const handleSwipeRight = () => {
-        toast.success('Mission Accepted! 🚴‍♂️', { duration: 4000 });
-        setCurrentIndex(prev => prev + 1);
+    const handleSwipeRight = async () => {
+        const d = donations[currentIndex];
+        if (d) {
+            try {
+                await riderAPI.acceptRescue({ donationId: d._id });
+                toast.success('Mission Accepted! 🚴‍♂️', { duration: 4000 });
+                setCurrentIndex(prev => prev + 1);
+            } catch (error) {
+                toast.error('Failed to accept mission');
+            }
+        }
     };
 
     if (currentIndex >= donations.length) {

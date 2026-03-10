@@ -19,9 +19,14 @@ const RiderFeed = () => {
             .catch(() => setRescues([]));
     }, []);
 
-    const handleAccept = (id) => {
-        toast.success('Rescue mission accepted! 🚴‍♂️');
-        setRescues(prev => prev.filter(r => r._id !== id));
+    const handleAccept = async (id) => {
+        try {
+            await riderAPI.acceptRescue({ donationId: id });
+            toast.success('Rescue mission accepted! 🚴‍♂️');
+            setRescues(prev => prev.filter(r => r._id !== id));
+        } catch (error) {
+            toast.error('Failed to accept mission');
+        }
     };
 
     return (

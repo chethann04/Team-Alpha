@@ -17,7 +17,10 @@ exports.getFeed = async (req, res) => {
 exports.acceptRescue = async (req, res) => {
     try {
         const { riderId, donationId } = req.body;
-        const donation = await Donation.findByIdAndUpdate(donationId, { status: 'accepted' }, { new: true });
+        const donation = await Donation.findByIdAndUpdate(donationId, {
+            status: 'in_transit',
+            assignedRider: riderId || null
+        }, { new: true });
         res.status(200).json(donation);
     } catch (error) {
         res.status(400).json({ message: error.message });
