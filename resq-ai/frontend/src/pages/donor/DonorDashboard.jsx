@@ -55,6 +55,7 @@ const DonorDashboard = () => {
                 <SDGBadgeReveal
                     isOpen={showBadge}
                     onClose={() => {
+                        console.log("Closing Badge Reveal and resetting activeOp");
                         setShowBadge(false);
                         setActiveOp(null); // Return to dashboard home
                     }}

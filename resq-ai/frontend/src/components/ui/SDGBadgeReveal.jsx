@@ -33,6 +33,7 @@ const SDGBadgeReveal = ({ isOpen, onClose, badgeType = 'SDG 12: Responsible Cons
                         numberOfPieces={400}
                         gravity={0.1}
                         colors={['#63b3ed', '#68d391', '#805ad5', '#ed8936', '#f687b3']}
+                        style={{ pointerEvents: 'none' }}
                     />
 
                     <motion.div
@@ -90,8 +91,11 @@ const SDGBadgeReveal = ({ isOpen, onClose, badgeType = 'SDG 12: Responsible Cons
                                 Your contribution has reached the Milestone Alpha tier. Global SDG verification pending.
                             </p>
                             <button
-                                onClick={onClose}
-                                className="mt-6 px-12 py-5 rounded-[2.5rem] bg-white text-black font-black text-sm uppercase tracking-widest shadow-2xl hover:scale-110 active:scale-95 transition-all"
+                                onClick={() => {
+                                    console.log("Continue Mission clicked");
+                                    onClose();
+                                }}
+                                className="mt-6 px-12 py-5 rounded-[2.5rem] bg-white text-black font-black text-sm uppercase tracking-widest shadow-2xl hover:scale-110 active:scale-95 transition-all relative z-[1001]"
                             >
                                 Continue Mission
                             </button>
