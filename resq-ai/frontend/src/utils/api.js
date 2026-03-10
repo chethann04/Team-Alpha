@@ -15,6 +15,7 @@ API.interceptors.response.use(
 
 export const donationAPI = {
     verify: (data) => API.post('/donate/verify', data),
+    create: (data) => API.post('/donate', data),
     getAll: () => API.get('/donate'),
     updateStatus: (id, status) => API.patch(`/donate/${id}/status`, { status }),
 };
